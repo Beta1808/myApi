@@ -21,3 +21,5 @@ async def get_name():
 async def get_address():
     return (f"\nAddress: {faker.address()}")
 
+
+
