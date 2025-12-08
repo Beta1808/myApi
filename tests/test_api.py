@@ -25,3 +25,5 @@ async def test_read_address():
                            base_url="http://test") as ac:
         response = await ac.get("/address")
         assert response.status_code == 200
+
+

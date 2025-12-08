@@ -3,4 +3,5 @@ Faker==19.13.0
 fastapi==0.104.1
 httpx==0.25.2
 pytest==7.4.3
+pytest-asyncio==0.21.1
 uvicorn==0.24.0
