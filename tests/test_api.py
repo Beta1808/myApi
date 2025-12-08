@@ -1,4 +1,3 @@
-from symbol import with_item
 from urllib import request
 
 import pytest
