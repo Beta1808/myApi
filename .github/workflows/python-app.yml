@@ -1,20 +1,18 @@
-name: Python CI
+version: '3.8'
 
-on: [push]
-
-jobs:
-  test:
-    runs-on: self-hosted
-
-    steps:
-    - uses: actions/checkout@v4
-
-
-    - name: Install dependencies
-      run: |
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-    - name: Run tests
-      run: |
-        source venv/bin/activate
-        pytest tests/ -v
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      sh -c "
+        echo 'Starting tests...' &&
+        python -m pytest tests/ -v &&
+        echo 'Starting API...' &&
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
