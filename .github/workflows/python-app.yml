@@ -1,43 +1,11 @@
-name: Docker Compose on Self-Hosted
-
-on:
-  push:
-    branches: [ main ]
-
+# Минимальный workflow
+name: CI
+on: [push]
 jobs:
-  deploy:
-    runs-on: self-hosted
-    
+  test:
+    runs-on: self-hosted  # Ваш легковесный сервер
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Create docker-compose.yml
-      run: |
-        cat > docker-compose.yml << 'EOF'
-        version: '3.8'
-        
-        services:
-          api:
-            build: .
-            ports:
-              - "8000:8000"
-            environment:
-              - PYTHONUNBUFFERED=1
-            restart: unless-stopped
-            healthcheck:
-              test: ["CMD", "curl", "-f", "http://localhost:8000/"]
-              interval: 30s
-              timeout: 10s
-              retries: 3
-        EOF
-    
-    - name: Deploy with Docker Compose
-      run: |
-        docker-compose down
-        docker-compose build
-        docker-compose up -d
-        
-        # Проверяем
-        sleep 10
-        docker-compose ps
-        curl -f http://localhost:8000/ || (docker-compose logs && exit 1)
+      - uses: actions/checkout@v4
+      - run: |
+          pip install pytest
+          pytest tests/
